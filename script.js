@@ -1,30 +1,34 @@
-let input = '0';
+const display = document.querySelector(".display");
+const numberBtns = document.querySelectorAll(".number");
+const operatorBtns = document.querySelectorAll(".operator");
+const clearBtn = document.querySelector(".clear");
+const equalBtn = document.querySelector(".equal");
 
-function addNumber(num) {
-  if (input === '0') {
-    input = num;
-  } else {
-    input += num;
+let currentOperand = "";
+let previousOperand = "";
+let currentOperator = null;
+
+function appendNumber(number) {
+  currentOperand += number;
+  display.value = currentOperand;
+}
+
+function chooseOperator(operator) {
+  if (currentOperand === "") return;
+  if (previousOperand !== "") {
+    compute();
   }
-  updateDisplay(input);
+  currentOperator = operator;
+  previousOperand = currentOperand;
+  currentOperand = "";
 }
 
-function addOperator(operator) {
-  input += operator;
-  updateDisplay(input);
-}
-
-function clearInput() {
-  input = '0';
-  updateDisplay(input);
-}
-
-function calculate() {
-  let result = eval(input);
-  input = result.toString();
-  updateDisplay(input);
-}
-
-function updateDisplay(input) {
-  document.getElementById('result').value = input;
-}
+function compute() {
+  let result;
+  const previous = parseFloat(previousOperand);
+  const current = parseFloat(currentOperand);
+  if (isNaN(previous) || isNaN(current)) return;
+  switch (currentOperator) {
+    case "+":
+      result = previous + current;
+     
